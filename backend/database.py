@@ -1,5 +1,6 @@
 
 import sqlite3
+from contextlib import closing
 
 from backend.config import DATABASE_PATH
 
@@ -16,8 +17,9 @@ def initialize_database():
     schema_path = DATABASE_PATH.parent / "backend" / "schema.sql"
     schema = schema_path.read_text(encoding="utf-8")
 
-    with get_connection() as connection:
+    with closing(get_connection()) as connection:
         connection.executescript(schema)
+        connection.commit()
 
 
 if __name__ == "__main__":
