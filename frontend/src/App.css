@@ -1,0 +1,347 @@
+
+/* Import the font used throughout the application. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
+/* Global theme and typography. */
+:root {
+  font-family: "DM Sans", sans-serif;
+  color: #1f2937;
+  background: #f5f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Include padding and borders in element dimensions. */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* Main page container. */
+.app {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 48px 0 24px;
+}
+
+/* Page title and Add Expense button. */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+h1 {
+  margin: 8px 0;
+  color: #111827;
+  font-size: clamp(28px, 4vw, 38px);
+}
+
+.subtitle,
+.section-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Shared styling for primary buttons. */
+.add-button {
+  border: 0;
+  border-radius: 9px;
+  background: #2563eb;
+  color: white;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background: #1d4ed8;
+}
+
+.add-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+/* Dashboard summary cards. */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.summary-card,
+.transactions {
+  border: 1px solid #e5eaf2;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 3px 12px rgb(15 23 42 / 3%);
+}
+
+.summary-card {
+  min-width: 0;
+  padding: 24px;
+}
+
+.summary-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.summary-card h2 {
+  margin: 16px 0 8px;
+  color: #111827;
+  font-size: clamp(21px, 3vw, 29px);
+  overflow-wrap: anywhere;
+}
+
+.summary-card span {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Expense section and section heading. */
+.transactions {
+  min-width: 0;
+  padding: 24px;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.section-heading h2,
+.expense-form-section h2 {
+  margin-top: 0;
+  color: #111827;
+}
+
+.section-heading h2 {
+  margin-bottom: 6px;
+  font-size: 20px;
+}
+
+/* Table container allows horizontal scrolling on narrow screens. */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/*
+ * Use the same table layout for headings and expense rows.
+ * The five columns are Description, Category, Date, Amount, Actions.
+ */
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Table headings. */
+.expense-table th {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e5eaf2;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Table data cells. */
+.expense-table td {
+  padding: 18px 12px;
+  border-bottom: 1px solid #f0f2f6;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.expense-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Keep descriptions visually prominent. */
+.description-cell {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Category labels. */
+.category-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+}
+
+/*
+ * Explicitly style both the heading and data cells for Amount.
+ * This prevents the heading from drifting away from the values.
+ */
+.expense-table th.amount-column,
+.expense-table td.amount-column {
+  min-width: 150px;
+  text-align: right;
+}
+
+/*
+ * Explicitly style both the heading and data cells for Actions.
+ * Center the heading above the Delete buttons.
+ */
+.expense-table th.actions-column,
+.expense-table td.actions-column {
+  min-width: 110px;
+  text-align: center;
+}
+
+/* Delete button. */
+.delete-button {
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  background: white;
+  color: #b91c1c;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background: #fef2f2;
+}
+
+.delete-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+/* Add Expense form. */
+.expense-form-section {
+  margin-bottom: 24px;
+}
+
+.expense-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.form-field label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #111827;
+  padding: 12px;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #2563eb;
+}
+
+.expense-form .add-button {
+  justify-self: start;
+}
+
+/* Success and error feedback messages. */
+.error-message {
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.success-message {
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #166534;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+/* Footer. */
+.app-footer {
+  padding: 24px 0 0;
+  color: #94a3b8;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Responsive layout for tablets and phones. */
+@media (max-width: 700px) {
+  .app {
+    width: calc(100% - 28px);
+    padding-top: 28px;
+  }
+
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .summary-card {
+    padding: 20px;
+  }
+
+  .transactions {
+    padding: 16px 10px;
+  }
+
+  .expense-form {
+    grid-template-columns: 1fr;
+  }
+}
+/* Center the message shown when the expense list is empty. */
+.empty-state {
+  padding: 32px 12px;
+  color: #64748b;
+  text-align: center;
+}
