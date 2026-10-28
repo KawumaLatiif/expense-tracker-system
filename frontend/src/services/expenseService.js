@@ -48,9 +48,34 @@ async function handleResponse(response) {
   return response.json();
 }
 
-// Retrieve all expenses from Django.
-export async function getExpenses() {
-  const response = await fetch(API_URL);
+export async function getExpenses(filters = {}) {
+  // Build a URL that can include search and category filters.
+  const url = new URL(API_URL);
+
+  // Add the search term only when the user enters one.
+  if (filters.search) {
+    url.searchParams.set("search", filters.search);
+  }
+
+  // Add the category only when a category is selected.
+  if (filters.category) {
+    url.searchParams.set("category", filters.category);
+  }
+
+  // Filter expenses on or after the selected start date.
+  if (filters.start_date) {
+    url.searchParams.set("start_date", filters.start_date);
+  }
+
+  // Filter expenses on or before the selected end date.
+  if (filters.end_date) {
+    url.searchParams.set("end_date", filters.end_date);
+  }
+
+  // Send the request to Django with the selected filters.
+  const response = await fetch(url);
+
+  // Return the expenses or handle any API errors.
   return handleResponse(response);
 }
 

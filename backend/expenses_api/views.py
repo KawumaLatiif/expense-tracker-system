@@ -30,7 +30,18 @@ class ExpenseViewSet(viewsets.ModelViewSet):
                 description__icontains=search.strip()
             )
 
-        return queryset
+        return queryset    
+
+        # Filter expenses from the selected start date onward.
+        start_date = self.request.query_params.get("start_date")
+        if start_date:
+            queryset = queryset.filter(expense_date__gte=start_date)
+
+        # Filter expenses up to and including the selected end date.
+        end_date = self.request.query_params.get("end_date")
+        if end_date:
+            queryset = queryset.filter(expense_date__lte=end_date)
+
 
     @action(detail=False, methods=["get"])
     def summary(self, request):

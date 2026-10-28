@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useState } from "react";
 
 import "./App.css";
@@ -31,6 +30,16 @@ function App() {
   // Track whether the initial expense request is loading.
   const [loading, setLoading] = useState(true);
 
+  // Store the text entered in the expense search box.
+  const [search, setSearch] = useState("");
+
+  // Store the category selected by the user.
+  const [category, setCategory] = useState("");
+
+  // Store the selected date range.
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   // Track the expense currently being deleted.
   const [deletingId, setDeletingId] = useState(null);
 
@@ -55,7 +64,12 @@ function App() {
   // Retrieve the expense list from the service.
   const fetchExpenses = useCallback(async () => {
     try {
-      const data = await getExpenses();
+      const data = await getExpenses({
+        search,
+        category,
+        start_date: startDate,
+        end_date: endDate,
+      });
 
       setExpenses(data);
       setError("");
@@ -68,18 +82,24 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [search, category, startDate, endDate]);
 
-  // Retrieve the dashboard summary from Django.
   const fetchSummary = useCallback(async () => {
     try {
-      const data = await getExpenseSummary();
+      // Request summary statistics using the active filters.
+      const data = await getExpenseSummary({
+        search,
+        category,
+        start_date: startDate,
+        end_date: endDate,
+      });
 
+      // Update the summary cards with the filtered statistics.
       setSummary(data);
     } catch (err) {
       console.error("Error loading expense summary:", err);
     }
-  }, []);
+  }, [search, category, startDate, endDate]);
 
   // Load expenses and summary statistics when the app opens.
   useEffect(() => {
@@ -245,6 +265,63 @@ function App() {
           error={formError}
         />
       )}
+      
+
+      <div className="expense-filters">
+        <div className="search-bar">
+          <label htmlFor="expense-search">Search expenses</label>
+          <input
+            id="expense-search"
+            type="search"
+            placeholder="Search by description..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+        </div>
+
+        <div className="category-filter">
+          <label htmlFor="expense-category">Filter by category</label>
+          <select
+            id="expense-category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option value="">All categories</option>
+
+            {[...new Set(expenses.map((expense) => expense.category))]
+              .filter(Boolean)
+              .sort()
+              .map((categoryName) => (
+                <option key={categoryName} value={categoryName}>
+                  {categoryName}
+                </option>
+              ))}
+          </select>
+        </div>
+        
+        <div className="date-filter">
+          <label htmlFor="start-date">From</label>
+          <input
+            id="start-date"
+            type="date"
+            value={startDate}
+            max={endDate || undefined}
+            onChange={(event) => setStartDate(event.target.value)}
+          />
+        </div>
+
+        <div className="date-filter">
+          <label htmlFor="end-date">To</label>
+          <input
+            id="end-date"
+            type="date"
+            value={endDate}
+            min={startDate || undefined}
+            onChange={(event) => setEndDate(event.target.value)}
+          />
+        </div>
+      </div>
+
 
       {/* Display expenses and summary cards. */}
       {loading ? (
