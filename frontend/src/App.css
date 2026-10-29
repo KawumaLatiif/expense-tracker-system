@@ -204,10 +204,17 @@ h1 {
  * Explicitly style both the heading and data cells for Amount.
  * This prevents the heading from drifting away from the values.
  */
-.expense-table th.amount-column,
-.expense-table td.amount-column {
+.expense-table th.actions-column,
+.expense-table td.actions-column {
   min-width: 150px;
-  text-align: right;
+  text-align: center;
+}
+
+.expense-table td.actions-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 /*
@@ -219,6 +226,29 @@ h1 {
   min-width: 110px;
   text-align: center;
 }
+
+
+/* Edit button. */
+.edit-button {
+  border: 1px solid #bfdbfe;
+  border-radius: 7px;
+  background: white;
+  color: #1d4ed8;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background: #eff6ff;
+}
+
+.edit-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 
 /* Delete button. */
 .delete-button {
@@ -240,6 +270,30 @@ h1 {
   cursor: wait;
   opacity: 0.6;
 }
+
+
+/* Cancel button. */
+.cancel-button {
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #475569;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #e2e8f0;
+}
+
+.cancel-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 
 /* Add Expense form. */
 .expense-form-section {
@@ -472,5 +526,306 @@ h1 {
   .category-filter,
   .date-filter {
     flex: 1 1 40%;
+  }
+}
+
+/* Card that contains the spending chart. */
+.chart-card {
+  margin: 24px 0;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+/* Chart title and subtitle. */
+.chart-heading h2 {
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.chart-heading p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ResponsiveContainer needs a parent with a definite height. */
+.category-chart {
+  width: 100%;
+  height: 320px;
+  margin-top: 16px;
+}
+
+/* Spending breakdown below the doughnut chart. */
+.spending-breakdown {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.spending-breakdown h3 {
+  margin: 0 0 18px;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Each expense category. */
+.breakdown-item {
+  margin-bottom: 18px;
+}
+
+.breakdown-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+  color: #374151;
+  font-size: 14px;
+}
+
+.breakdown-category {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.breakdown-category strong,
+.breakdown-details strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* The coloured dot matches the chart slice. */
+.breakdown-dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+/* Percentage progress bar. */
+.breakdown-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.breakdown-progress-track {
+  flex: 1;
+  height: 8px;
+  overflow: hidden;
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+
+.breakdown-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #6366f1;
+  transition: width 0.3s ease;
+}
+
+.breakdown-percentage {
+  width: 40px;
+  color: #6b7280;
+  font-size: 13px;
+  text-align: right;
+}
+
+/* Keep the breakdown readable on small screens. */
+@media (max-width: 480px) {
+  .chart-card {
+    padding: 16px;
+  }
+
+  .breakdown-details {
+    gap: 8px;
+    font-size: 13px;
+  }
+}
+
+
+/* Clear filters button. */
+.clear-filters-button {
+  align-self: end;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #475569;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.clear-filters-button:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.clear-filters-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+/* Make all date-picker calendar icons black. */
+.date-filter input[type="date"]::-webkit-calendar-picker-indicator,
+.expense-form input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0);
+  opacity: 1;
+  cursor: pointer;
+}
+
+
+/* Pagination layout. */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e5eaf2;
+}
+
+.pagination-info {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pagination-page {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Previous and Next buttons. */
+.pagination-button {
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #334155;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Stack pagination information on smaller screens. */
+@media (max-width: 600px) {
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+
+/* Expense sorting controls. */
+.sorting-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.sorting-controls label {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sorting-controls select {
+  max-width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #334155;
+  padding: 9px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.sorting-controls select:focus {
+  outline: 2px solid #bfdbfe;
+  outline-offset: 1px;
+}
+
+@media (max-width: 600px) {
+  .sorting-controls {
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sorting-controls select {
+    width: 100%;
+  }
+}
+
+
+/* Dashboard header actions. */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.export-button {
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #334155;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.export-button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.export-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+  .header-actions {
+    width: 100%;
   }
 }
