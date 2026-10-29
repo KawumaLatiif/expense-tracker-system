@@ -1,5 +1,6 @@
 
 from django.db.models import Count, Sum
+from django.db.models.functions import TruncMonth
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from .serializers import ExpenseSerializer
 class ExpenseViewSet(viewsets.ModelViewSet):
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
+
 
     def get_queryset(self):
         # Start with all expenses.
@@ -30,17 +32,22 @@ class ExpenseViewSet(viewsets.ModelViewSet):
                 description__icontains=search.strip()
             )
 
-        return queryset    
-
         # Filter expenses from the selected start date onward.
         start_date = self.request.query_params.get("start_date")
         if start_date:
-            queryset = queryset.filter(expense_date__gte=start_date)
+            queryset = queryset.filter(
+                expense_date__gte=start_date
+            )
 
         # Filter expenses up to and including the selected end date.
         end_date = self.request.query_params.get("end_date")
         if end_date:
-            queryset = queryset.filter(expense_date__lte=end_date)
+            queryset = queryset.filter(
+                expense_date__lte=end_date
+            )
+
+        return queryset
+
 
 
     @action(detail=False, methods=["get"])
@@ -69,3 +76,33 @@ class ExpenseViewSet(viewsets.ModelViewSet):
             "expense_count": totals["expense_count"],
             "by_category": list(category_summary),
         })
+
+    
+    @action(detail=False, methods=["get"])
+    def monthly_summary(self, request):
+        # Apply the same filters used by the expense list.
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Group expenses by month and calculate each month's total.
+        monthly_data = (
+            queryset.annotate(
+                month=TruncMonth("expense_date")
+            )
+            .values("month")
+            .annotate(total_amount=Sum("amount"))
+            .order_by("month")
+        )
+
+        # Format the month as YYYY-MM for the frontend.
+        by_month = [
+            {
+                "month": item["month"].strftime("%Y-%m"),
+                "total_amount": item["total_amount"] or 0,
+            }
+            for item in monthly_data
+        ]
+
+        return Response({
+            "by_month": by_month,
+        })
+

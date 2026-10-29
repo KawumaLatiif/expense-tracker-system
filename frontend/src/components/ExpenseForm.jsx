@@ -1,14 +1,30 @@
 
 import React from "react";
 
-// This component displays the form used to add an expense.
-// The parent component (App.jsx) supplies the data and functions.
-function ExpenseForm({ form, onChange, onSubmit, saving, error }) {
+// Display the form used to add or edit an expense.
+// App.jsx supplies the form data and event handlers.
+function ExpenseForm({
+  form,
+  onChange,
+  onSubmit,
+  saving,
+  error,
+  editingExpense,
+  onCancel,
+}) {
+  // Determine whether the user is adding or editing an expense.
+  const isEditing = Boolean(editingExpense);
+
   return (
     <section className="transactions expense-form-section">
-      <h2>Add a new expense</h2>
+      <h2>
+        {isEditing ? "Edit expense" : "Add a new expense"}
+      </h2>
+
       <p className="subtitle">
-        Enter the transaction details below.
+        {isEditing
+          ? "Update the transaction details below."
+          : "Enter the transaction details below."}
       </p>
 
       {/* Submit the form using the handler supplied by App.jsx. */}
@@ -16,6 +32,7 @@ function ExpenseForm({ form, onChange, onSubmit, saving, error }) {
         {/* Expense description */}
         <div className="form-field">
           <label htmlFor="description">Description</label>
+
           <input
             id="description"
             name="description"
@@ -30,6 +47,7 @@ function ExpenseForm({ form, onChange, onSubmit, saving, error }) {
         {/* Expense category */}
         <div className="form-field">
           <label htmlFor="category">Category</label>
+
           <select
             id="category"
             name="category"
@@ -52,6 +70,7 @@ function ExpenseForm({ form, onChange, onSubmit, saving, error }) {
         {/* Amount in Ugandan shillings */}
         <div className="form-field">
           <label htmlFor="amount">Amount (UGX)</label>
+
           <input
             id="amount"
             name="amount"
@@ -68,6 +87,7 @@ function ExpenseForm({ form, onChange, onSubmit, saving, error }) {
         {/* Date the expense occurred */}
         <div className="form-field">
           <label htmlFor="expense_date">Expense date</label>
+
           <input
             id="expense_date"
             name="expense_date"
@@ -85,14 +105,29 @@ function ExpenseForm({ form, onChange, onSubmit, saving, error }) {
           </p>
         )}
 
-        {/* Prevent duplicate submissions while saving. */}
-        <button
-          className="add-button"
-          type="submit"
-          disabled={saving}
-        >
-          {saving ? "Saving..." : "Save expense"}
-        </button>
+        {/* Submit or cancel the current operation. */}
+        <div className="form-actions">
+          <button
+            className="add-button"
+            type="submit"
+            disabled={saving}
+          >
+            {saving
+              ? "Saving..."
+              : isEditing
+                ? "Update Expense"
+                : "Add Expense"}
+          </button>
+
+          <button
+            className="cancel-button"
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </section>
   );

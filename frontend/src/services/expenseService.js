@@ -92,6 +92,26 @@ export async function createExpense(expense) {
   return handleResponse(response);
 }
 
+export async function updateExpense(id, expenseData) {
+  const response = await fetch(`${API_URL}${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(expenseData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      JSON.stringify(errorData) ||
+        "Failed to update expense."
+    );
+  }
+
+  return response.json();
+}
+
 // Delete one expense using its database ID.
 export async function deleteExpense(id) {
   const response = await fetch(`${API_URL}${id}/`, {
@@ -114,4 +134,23 @@ export async function getExpenseSummary(filters = {}) {
 
   const response = await fetch(url);
   return handleResponse(response);
+}
+
+export async function getMonthlySummary(filters = {}) {
+  const url = new URL(`${API_URL}monthly_summary/`);
+
+  // Add the active filters to the request.
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) {
+      url.searchParams.set(key, value);
+    }
+  });
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch monthly spending summary.");
+  }
+
+  return response.json();
 }
